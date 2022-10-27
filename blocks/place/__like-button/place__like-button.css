@@ -1,6 +1,8 @@
 .place__like-button {
   border: solid 1px black;
   background: url(../../../images/like-button.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
   background-position: center;
   border: none;
   transition: cubic-bezier(0.075, 0.82, 0.165, 1);
