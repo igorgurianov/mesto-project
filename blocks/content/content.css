@@ -5,8 +5,14 @@
   min-width: 320px;
 }
 
-@media screen and (max-width:767px) {
+@media screen and (max-width:919px) {
   .content {
-   max-width: 282px;
+    max-width: 581px;
   }
- }
+}
+
+@media screen and (max-width:598px) {
+  .content {
+    max-width: 282px;
+  }
+}

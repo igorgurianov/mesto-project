@@ -1,8 +1,7 @@
 .popup__container {
-  margin: 195px auto;
-  padding: 34px 36px 37px ;
-  width: 358px;
-  height: 259px;
+  margin: calc(50vh - 330px/2) auto;
+  padding: 34px 36px 37px;
+  max-width: 358px;
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -14,8 +13,8 @@
 @media screen and (max-width: 767px) {
   .popup__container {
     margin: 123px auto;
-    width: 238px;
-    height: 272px;
+    max-width: 238px;
     padding: 25px 22px;
+    margin: calc(50vh - 322px/2) auto;
   }
 }
