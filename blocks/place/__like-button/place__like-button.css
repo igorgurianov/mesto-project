@@ -13,7 +13,7 @@
   left: 240px;
   width: 22px;
   height: 19px;
-
+  cursor: pointer;
 }
 
 .place__like-button:hover {
