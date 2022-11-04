@@ -29,6 +29,7 @@ let profileJob = document.querySelector('.profile__description')
 function handleFormSubmit (evt) {
   evt.preventDefault();
   profileName.textContent = `${nameInput.value}`
+  console.log(profileName.textContent)
   profileJob.textContent = `${jobInput.value}`
   popupClosed ()
 }
@@ -53,3 +54,4 @@ for (var i = 0; i < likeBtn.length; i++) {
 }
 */
 console.log(likeBtn)
+
