@@ -35,4 +35,21 @@ function handleFormSubmit (evt) {
 
 formElement.addEventListener('submit', handleFormSubmit);
 
-console.log
+// Лайк карточки
+
+let likeBtn = document.querySelector('.place__like-button');
+
+function addLike () {
+  likeBtn.classList.toggle('place__like-button_active')
+  console.log('click')
+}
+
+likeBtn.addEventListener('click', addLike);
+
+/*console.log('click')
+
+for (var i = 0; i < likeBtn.length; i++) {
+  likeBtn[i].addEventListener('click', addLike)
+}
+*/
+console.log(likeBtn)
