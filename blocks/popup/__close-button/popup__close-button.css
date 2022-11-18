@@ -1,5 +1,6 @@
 .popup__close-button {
   background: url(../../../images/close-button.svg);
+  padding: 0;
   height: 32px;
   width: 32px;
   position: absolute;
@@ -9,6 +10,7 @@
   border: 0;
   cursor: pointer;
   transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+  background-repeat: no-repeat;
 }
 
 .popup__close-button:hover {
