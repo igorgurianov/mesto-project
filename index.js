@@ -49,7 +49,6 @@ function createCard(cardNameValue, cardSrcValue) {
 // отображение новых карточек в DOM
 function renderCard(card) {
   cardsContainer.prepend(card); // вставляем наш контейнер с названием и ссылкой в начало блока карточек
-  addCardForm.reset()
 }
 
 // Функция коллбэк для слушателя на кнопке удалить.
@@ -127,6 +126,7 @@ function handleCardFormSubmit(evt) {
   evt.preventDefault();
   renderCard(createCard(cardName.value, cardSrc.value));
   closePopup(addCardPopup);
+  addCardForm.reset()
 }
 
 addCardForm.addEventListener('submit', handleCardFormSubmit) // сабмит слушатель на саму форму
