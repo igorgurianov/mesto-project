@@ -1,3 +1,6 @@
+// Попапы
+const popup = document.querySelectorAll('.popup') // выбираем первый попап
+
 // Попап добавления карточек
 const addCardPopup = document.querySelector('.popup_type_add_card') // выбираем куда будем добавлять класс opened
 const addCardButton = document.querySelector('.profile__add-button') // выбираем в ДОМ кнопку открытия попапа
@@ -5,8 +8,8 @@ const addCardPopupContainer = addCardPopup.querySelector('.popup__container') //
 const closeBttnAddCardPopup = addCardPopupContainer.querySelector('.popup__close-button') // выбираем кнопку в контейнере в попапе с новыми карточками
 
 // Попап редактирования профиля
+const editProfilePopup = document.querySelector('.popup_type_edit-profile')
 const profileEditButton = document.querySelector('.profile__edit-button')
-const editProfilePopup = document.querySelector('.popup')
 const popupCloseButton = document.querySelector('.popup__close-button');
 
 // Попап с картинкой
@@ -34,6 +37,9 @@ const cardSrc = document.querySelector('.popup__text-input_type_link') // выб
 // Поиск всех крестиков (кнопок закрытия)
 const closeButtons = document.querySelectorAll('.popup__close-button')
 
+// Секция карточек (для лайков через всплытие)
+const cardsSection = document.querySelector('.cards-grid')
+
 // создание новых карточек
 function createCard(cardNameValue, cardSrcValue) {
   const cardElement = userTemplate.querySelector('.place').cloneNode(true); //клонируем див внутри него со всем содержимым
@@ -41,7 +47,7 @@ function createCard(cardNameValue, cardSrcValue) {
   cardElement.querySelector('.place__photo').src = cardSrcValue; // подставляем ссылку из инпута
   cardElement.querySelector('.place__photo').alt = cardNameValue
   cardElement.querySelector('.place__photo').addEventListener('click', function (event) { clickLargeImage(event, cardNameValue) }) // слушатель на картинку для открытия попапа - передаем ему 2 аргумента
-  cardElement.querySelector('.place__like-button').addEventListener('click', clickLikeCard) // Слушатель на кнопку лайк
+  //cardElement.querySelector('.place__like-button').addEventListener('click', clickLikeCard) // Слушатель на кнопку лайк
   cardElement.querySelector('.place__delete-button').addEventListener('click', clickDeleteCard) // слушатель на кнопку удаления карточки
   return cardElement
 }
@@ -56,10 +62,17 @@ function clickDeleteCard(event) {
   event.target.closest('.place').remove() // Отлеживаем на какой элемент кликнули, выбираем ближайший с классом Place и удаляем его
 }
 
-// Функция коллбэк для слушателя на кнопке лайк.
+// Кнопка лайк.
 function clickLikeCard(event) {
   event.target.classList.toggle('place__like-button_active') // Переключаем наличие/отсутствие класса активной кнопки
 }
+
+cardsSection.addEventListener('click', function (evt) {
+  if (evt.target.classList.contains('place__like-button')) {
+    clickLikeCard(evt);
+  }
+})
+
 
 // Шесть карточек «из коробки»
 
@@ -94,9 +107,12 @@ initialCards.forEach(function (item) {
   renderCard(createCard(item.name, item.link))
 })
 
-// Функция открытия попапа - переиспользуется для открытия попапов редактирования и добавления, получая нужный аргумент
+// Функция открытия попапа:
+//Переиспользуется для открытия попапов редактирования и добавления, получая нужный аргумент
+//Добавляем слушатель на закрытие попапов по кнопке ESC
 function openPopup(popupElement) {
-  popupElement.classList.add('popup_opened')
+  popupElement.classList.add('popup_opened');
+  document.addEventListener('keydown', closeOnEsc);
 }
 
 //  Открыть попап редактирования
@@ -140,12 +156,34 @@ function clickLargeImage(event, cardNameValue) {
 }
 
 // Закрытие всех попапов
+//   Удаляем слушатель на закрытие попапов по кнопке ESC
+function closePopup(popupElement) {
+  popupElement.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closeOnEsc)
+}
 
+//   Закрытие по клику на крестик
 closeButtons.forEach((button) => {
   const popup = button.closest('.popup');
-  button.addEventListener('click', () => { closePopup(popup) })
+  button.addEventListener('click', () => {
+    closePopup(popup)
+  })
 })
 
-function closePopup(popupElement) {
-  popupElement.classList.remove('popup_opened')
+//   Закрытие по клику на оверлей
+popup.forEach((item) => {
+  item.addEventListener('click', function (evt) {
+    if (evt.target.classList.contains('popup')) {
+      closePopup(evt.target)
+    }
+  })
+})
+
+//   Закрытие по кнопке ESC
+function closeOnEsc(evt) {
+  const currentPopup = document.querySelector('.popup_opened')
+  if (evt.key === 'Escape') {
+    closePopup(currentPopup)
+  }
 }
+
