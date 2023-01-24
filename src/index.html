@@ -2,16 +2,16 @@
 <html lang="Ru">
 
 <head>
-  <link rel="stylesheet" href="./pages/index.css">
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project: Mesto</title>
+
 </head>
 
 <body class="page">
   <header class="header">
-    <img class="header__logo" alt="Логотип Mesto Russia" src="./images/mesto-logo-white.svg">
+    <img class="header__logo" src="<%=require('./images/mesto-logo-white.svg')%>" alt="Логотип Mesto Russia">
   </header>
 
   <main class="content">
@@ -26,7 +26,9 @@
             data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
           <span class="name-input-error popup__input-error"></span>
           <input type="text" id="description-input" class="popup__text-input popup__text-input_type_description"
-            name="description" placeholder="Исследователь океана" required minlength="2" maxlength="200" novalidate>
+            name="description" placeholder="Исследователь океана" required minlength="2" maxlength="200" novalidate
+            pattern="^[a-zA-Z]+$"
+            data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
           <span class="description-input-error popup__input-error"></span>
           <button type="submit" aria-label="Сохранить" class="popup__submit popup__save-button">Сохранить</button>
         </form>
@@ -39,7 +41,8 @@
         <h2 class="popup__title">Новое место</h2>
         <form name="popup_form" class="popup__input-container popup__input-container_type_add">
           <input type="text" id="place-input" class="popup__text-input popup__text-input_type_card-name" name="name"
-            placeholder="Название" required minlength="2" maxlength="30">
+            placeholder="Название" required minlength="2" maxlength="30" pattern="^[a-zA-Z]+$"
+            data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
           <span class="place-input-error popup__input-error"></span>
           <input type="url" id="link-input" class="popup__text-input popup__text-input_type_link" name="description"
             placeholder="Ссылка на картинку" required>
@@ -58,7 +61,7 @@
     </section>
     <!-- Here section profile starts-->
     <section class="profile">
-      <img class="profile__avatar" src="./images/profile-avatar.jpg" alt="Аватар профиля">
+      <img class="profile__avatar" src="<%=require('./images/profile-avatar.jpg')%>" alt="Аватар профиля">
       <div class="profile__info">
         <h1 class="profile__name">Жак-Ив Кусто</h1>
         <p class="profile__description">Исследователь океана</p>
@@ -85,9 +88,12 @@
       <button type="button" aria-label="Нравится" class="place__like-button"></button>
     </div>
   </template>
-
-  <script src="./index.js"></script>
-  <script src="./validate.js"></script>
+  <!-- Here template starts
+  <script type="module" src="./components/index.js"></script>
+  <script type="module" src="./components/card.js"></script>
+  <script type="module" src="./components/modal.js"></script>
+  <script type="module" src="./components/validate.js"></script>
+  -->
 </body>
 
 </html>
