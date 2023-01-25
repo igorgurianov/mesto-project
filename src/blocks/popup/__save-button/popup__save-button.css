@@ -8,8 +8,6 @@
   border-radius: 2px;
   font-size: 18px;
   line-height: 22px;
-  cursor: pointer;
-  transition: cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 @media screen and (max-width: 767px) {
@@ -20,6 +18,7 @@
   }
 }
 
-.popup__save-button:hover {
+.popup__save-button:valid:hover {
   opacity: .8;
+  cursor: pointer;
 }

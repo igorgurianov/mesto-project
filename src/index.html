@@ -13,52 +13,7 @@
   <header class="header">
     <img class="header__logo" src="<%=require('./images/mesto-logo-white.svg')%>" alt="Логотип Mesto Russia">
   </header>
-
   <main class="content">
-    <!-- Popup edit profile starts-->
-    <section class="popup popup_type_edit-profile">
-      <div class="popup__container">
-        <button type="button" aria-label="Закрыть" class="popup__close-button"></button>
-        <h2 class="popup__title">Редактировать профиль</h2>
-        <form name="popup_form" class="popup__input-container popup__input-container_type_profile">
-          <input type="text" id="name-input" class="popup__text-input popup__text-input_type_name" name="name"
-            placeholder="Жак-Ив Кусто" required minlength="2" maxlength="40" novalidate pattern="[a-zA-Zа-яёА-ЯЁ\-\s]+"
-            data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
-          <span class="name-input-error popup__input-error"></span>
-          <input type="text" id="description-input" class="popup__text-input popup__text-input_type_description"
-            name="description" placeholder="Исследователь океана" required minlength="2" maxlength="200" novalidate
-            pattern="[a-zA-Zа-яёА-ЯЁ\-\s]+"
-            data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
-          <span class="description-input-error popup__input-error"></span>
-          <button type="submit" aria-label="Сохранить" class="popup__submit popup__save-button">Сохранить</button>
-        </form>
-      </div>
-    </section>
-    <!-- Popup add cards starts-->
-    <section class="popup popup_type_add_card">
-      <div class="popup__container">
-        <button type="button" aria-label="Закрыть" class="popup__close-button"></button>
-        <h2 class="popup__title">Новое место</h2>
-        <form name="popup_form" class="popup__input-container popup__input-container_type_add">
-          <input type="text" id="place-input" class="popup__text-input popup__text-input_type_card-name" name="name"
-            placeholder="Название" required minlength="2" maxlength="30" pattern="[a-zA-Zа-яёА-ЯЁ\-\s]+"
-            data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
-          <span class="place-input-error popup__input-error"></span>
-          <input type="url" id="link-input" class="popup__text-input popup__text-input_type_link" name="description"
-            placeholder="Ссылка на картинку" required>
-          <span class="link-input-error popup__input-error"></span>
-          <button type="submit" aria-label="Сохранить" class="popup__submit popup__save-button">Создать</button>
-        </form>
-      </div>
-    </section>
-    <!-- Popup image starts-->
-    <section class="popup popup_type_image">
-      <div class="popup__image-container">
-        <button type="button" aria-label="Закрыть" class="popup__close-button"></button>
-        <img class="popup__image" src="">
-        <label class="popup__label"></label>
-      </div>
-    </section>
     <!-- Here section profile starts-->
     <section class="profile">
       <img class="profile__avatar" src="<%=require('./images/profile-avatar.jpg')%>" alt="Аватар профиля">
@@ -71,13 +26,60 @@
     </section>
     <!-- Here section cards-grid starts-->
     <section class="cards-grid">
-
     </section>
   </main>
+
   <!-- Here footer starts-->
   <footer class="footer">
     <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
   </footer>
+
+  <!-- Popup edit profile starts-->
+  <section class="popup popup_type_edit-profile">
+    <div class="popup__container">
+      <button type="button" aria-label="Закрыть" class="popup__close-button"></button>
+      <h2 class="popup__title">Редактировать профиль</h2>
+      <form name="popup_form" class="popup__input-container popup__input-container_type_profile">
+        <input type="text" id="name-input" class="popup__text-input popup__text-input_type_name" name="name"
+          placeholder="Жак-Ив Кусто" required minlength="2" maxlength="40" novalidate pattern="[a-zA-Zа-яёА-ЯЁ\-\s]+"
+          data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
+        <span class="name-input-error popup__input-error"></span>
+        <input type="text" id="description-input" class="popup__text-input popup__text-input_type_description"
+          name="description" placeholder="Исследователь океана" required minlength="2" maxlength="200" novalidate
+          pattern="[a-zA-Zа-яёА-ЯЁ\-\s]+"
+          data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
+        <span class="description-input-error popup__input-error"></span>
+        <button type="submit" aria-label="Сохранить" class="popup__submit popup__save-button">Сохранить</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Popup add cards starts-->
+  <section class="popup popup_type_add_card">
+    <div class="popup__container">
+      <button type="button" aria-label="Закрыть" class="popup__close-button"></button>
+      <h2 class="popup__title">Новое место</h2>
+      <form name="popup_form" class="popup__input-container popup__input-container_type_add">
+        <input type="text" id="place-input" class="popup__text-input popup__text-input_type_card-name" name="name"
+          placeholder="Название" required novalidate minlength="2" maxlength="30" pattern="[a-zA-Zа-яёА-ЯЁ\-\s]+"
+          data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
+        <span class="place-input-error popup__input-error"></span>
+        <input type="url" id="link-input" class="popup__text-input popup__text-input_type_link" name="description"
+          placeholder="Ссылка на картинку" required novalidate>
+        <span class="link-input-error popup__input-error"></span>
+        <button type="submit" aria-label="Сохранить" class="popup__submit popup__save-button">Создать</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Popup image starts-->
+  <section class="popup popup_type_image">
+    <div class="popup__image-container">
+      <button type="button" aria-label="Закрыть" class="popup__close-button"></button>
+      <img class="popup__image" src="">
+      <label class="popup__label"></label>
+    </div>
+  </section>
 
   <!-- Here template starts-->
   <template id="card-template">
