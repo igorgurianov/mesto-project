@@ -17,7 +17,4 @@ function closePopup(popupElement) {
 function openPopup(popupElement) {
   popupElement.classList.add('popup_opened');
   document.addEventListener('keydown', closeOnEsc);
-  const btnElement = popupElement.querySelector('.popup__submit')
-  btnElement.classList.add('popup__submit_inactive')
-  btnElement.disabled = true
 }

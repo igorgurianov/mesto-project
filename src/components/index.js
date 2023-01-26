@@ -65,6 +65,8 @@ function handleCardFormSubmit(evt) {
   renderCard(createCard(cardName.value, cardSrc.value));
   closePopup(popupNewCard);
   formAddCard.reset();
+  evt.submitter.classList.add('popup__submit_inactive');
+  evt.submitter.disabled = true;
 }
 
 // Кнопка сохранить
@@ -72,7 +74,8 @@ function handleFormSubmit(evt) {
   evt.preventDefault();
   profileName.textContent = `${nameInput.value}`
   profileJob.textContent = `${jobInput.value}`
-  closePopup(popupEditProfile)
+  closePopup(popupEditProfile);
+
 }
 
 //  Слушатель на попап редактирования профиля
