@@ -1,11 +1,9 @@
 .profile__avatar {
   margin: 0;
   border-radius: 100%;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
 }
 
-@media screen and (max-width: 919px) {
-  .profile__avatar {
-    max-width: 120px;
-    margin: 0 auto;
-  }
-}
+.profile__avatar:hover {}

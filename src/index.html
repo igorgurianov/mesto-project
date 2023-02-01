@@ -16,10 +16,12 @@
   <main class="content">
     <!-- Here section profile starts-->
     <section class="profile">
-      <img class="profile__avatar" src="<%=require('./images/profile-avatar.jpg')%>" alt="Аватар профиля">
+      <button type="button" aria-label="Изменить аватар" class="profile__avatar-button">
+        <img class="profile__avatar" src="<%=require('./images/profile-avatar.jpg')%>" alt="Аватар профиля">
+      </button>
       <div class="profile__info">
-        <h1 class="profile__name">Жак-Ив Кусто</h1>
-        <p class="profile__description">Исследователь океана</p>
+        <h1 class="profile__name"></h1>
+        <p class="profile__description"></p>
       </div>
       <button type="button" aria-label="Редактировать" class="profile__edit-button"></button>
       <button type="button" aria-label="Добавить" class="profile__add-button"></button>
@@ -33,6 +35,20 @@
   <footer class="footer">
     <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
   </footer>
+
+  <!-- Avatar popup-->
+  <section class="popup popup_type_edit-avatar ">
+    <div class="popup__container">
+      <button type="button" aria-label="Закрыть" class="popup__close-button"></button>
+      <h2 class="popup__title">Обновить аватар</h2>
+      <form name="popup_form" class="popup__input-container popup__input-container_type_avatar">
+        <input type="url" id="avatar-input" class="popup__text-input popup__text-input_type_avatar" name="description"
+          placeholder="Введите ссылку" required novalidate>
+        <span class="avatar-input-error popup__input-error"></span>
+        <button type="submit" aria-label="Сохранить" class="popup__submit popup__save-button">Сохранить</button>
+      </form>
+    </div>
+  </section>
 
   <!-- Popup edit profile starts-->
   <section class="popup popup_type_edit-profile">
@@ -88,6 +104,7 @@
       <button type="button" class="place__delete-button"></button>
       <h2 class="place__name"></h2>
       <button type="button" aria-label="Нравится" class="place__like-button"></button>
+      <div class="place__like-counter">2</div>
     </div>
   </template>
 

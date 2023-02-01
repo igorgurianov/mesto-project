@@ -5,7 +5,8 @@ import '../pages/index.css'
 import { createCard, renderCard } from './card.js';
 import { closePopup, openPopup } from './modal.js';
 import { enableValidation } from './validate.js';
-export { clickLargeImage }
+import { check, getCards, getUser, editProfileInfo, addNewCard, editAvatar } from './api.js'
+export { clickLargeImage, renderUserInfo, renderLoading }
 
 // Закрытие попапов по оверлею
 const popupList = document.querySelectorAll('.popup') // выбираем все попапы
@@ -13,11 +14,15 @@ const popupList = document.querySelectorAll('.popup') // выбираем все
 // Все крестики - кнопки закрытия
 const btnClosePopupList = document.querySelectorAll('.popup__close-button')
 
-//Кнопка открытия попапа редактирования профиля
+//Кнопки открытия попапа
+// - редактирования профиля
 const btnOpenEditProfile = document.querySelector('.profile__edit-button')
 
-// Кнопка открытия попапа добавления карточек
+// - добавления карточек
 const btnOpenNewCardPopup = document.querySelector('.profile__add-button')
+
+// - добавления карточек
+const btnOpenAvatarPopup = document.querySelector('.profile__avatar-button')
 
 // Форма добавления карточки
 const formAddCard = document.querySelector('.popup__input-container_type_add'); // выбираем форму добавления карточки
@@ -33,9 +38,13 @@ const popupNewCard = document.querySelector('.popup_type_add_card') // для к
 
 // Редактирования профиля
 const popupEditProfile = document.querySelector('.popup_type_edit-profile')
-const formEditProfile = document.querySelector('form', '.popup__input-container_type_profile')
+const formEditProfile = document.querySelector('.popup__input-container_type_profile')
 const nameInput = formEditProfile.querySelector('.popup__text-input_type_name')
 const jobInput = formEditProfile.querySelector('.popup__text-input_type_description')
+const profileAvatar = document.querySelector('.profile__avatar');
+const popupEditAvatar = document.querySelector('.popup_type_edit-avatar');
+const formEditAvatar = document.querySelector('.popup__input-container_type_avatar') // форма изменения аватара
+const avatarInput = formEditAvatar.querySelector('.popup__text-input_type_avatar') // инпут аватара
 
 // Попап с картинкой
 const imagePopupForm = document.querySelector('.popup_type_image');
@@ -51,6 +60,17 @@ enableValidation({
   errorClass: 'popup__input-error_active'
 })
 
+// ФУНКЦИИ
+// Отрисовка состояния загрузки
+function renderLoading(evt, isLoading) {
+  const btn = evt.target.querySelector('.popup__submit')
+  if (isLoading) {
+    btn.textContent = 'Сохранение...'
+  } else {
+    btn.textContent = 'Создать'
+  }
+}
+
 // Открыть попап с картинкой
 function clickLargeImage(cardSrcValue, cardNameValue) {
   openPopup(imagePopupForm);
@@ -62,39 +82,70 @@ function clickLargeImage(cardSrcValue, cardNameValue) {
 // Кнопка "Создать" - добавить место
 function handleCardFormSubmit(evt) {
   evt.preventDefault();
-  renderCard(createCard(cardName.value, cardSrc.value));
+  renderLoading(evt, true)
+  addNewCard(cardName.value, cardSrc.value, evt)
   closePopup(popupNewCard);
   formAddCard.reset();
   evt.submitter.classList.add('popup__submit_inactive');
   evt.submitter.disabled = true;
 }
 
-// Кнопка сохранить
+// Кнопка сохранить - информация о пользователе
 function handleFormSubmit(evt) {
   evt.preventDefault();
-  profileName.textContent = `${nameInput.value}`
-  profileJob.textContent = `${jobInput.value}`
+  renderLoading(evt, true)
+  editProfileInfo(`${nameInput.value}`, `${jobInput.value}`, evt)
   closePopup(popupEditProfile);
-
+  evt.submitter.classList.add('popup__submit_inactive');
+  evt.submitter.disabled = true;
 }
 
-//  Слушатель на попап редактирования профиля
+// Отрисовка информации о пользователе
+function renderUserInfo(userInfo) {
+  profileAvatar.src = userInfo.avatar;
+  profileName.textContent = userInfo.name;
+  profileJob.textContent = userInfo.about;
+}
+
+getUser()
+
+// СЛУШАТЕЛИ НА САБМИТ ФОРМ
+
+//__Слушатель - аватар
+formEditAvatar.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  renderLoading(evt, true)
+  editAvatar(avatarInput.value, evt)
+  closePopup(popupEditAvatar)
+  formEditAvatar.reset();
+  evt.submitter.classList.add('popup__submit_inactive');
+  evt.submitter.disabled = true;
+})
+
+//__Слушатель -  добавление карточек
+formAddCard.addEventListener('submit', handleCardFormSubmit)
+
+//__Слушатель - редактирование профиля
+formEditProfile.addEventListener('submit', handleFormSubmit);
+
+
+// СЛУШАТЕЛИ НА ПОПАПЫ
+//__ Слушатель - аватар
+btnOpenAvatarPopup.addEventListener('click', () => {
+  openPopup(popupEditAvatar)
+})
+
+//__ Слушатель - попап редактирования профиля
 btnOpenEditProfile.addEventListener('click', function () {
   openPopup(popupEditProfile)
   nameInput.value = profileName.textContent
   jobInput.value = profileJob.textContent
 });
 
-// Слушатель на сабмит формы редактирования профиля
-formEditProfile.addEventListener('submit', handleFormSubmit);
-
-// Слушатель на открытие попапа добавления карточек
+//__Слушатель - открыть попап добавления карточек
 btnOpenNewCardPopup.addEventListener('click', function () {
   openPopup(popupNewCard)
 })
-
-// Слушатель на сабмит формы добавления карточек
-formAddCard.addEventListener('submit', handleCardFormSubmit) // сабмит слушатель на саму форму
 
 // Закрытие всех попапов
 //   Слушатель закрытия попапа по клику на крестик
@@ -113,6 +164,5 @@ popupList.forEach((item) => {
     }
   })
 })
-
 
 

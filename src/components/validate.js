@@ -72,5 +72,3 @@ function setEventListeners(formElement, settings) {
   })
 }
 
-
-
