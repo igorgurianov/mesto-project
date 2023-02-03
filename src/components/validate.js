@@ -1,4 +1,4 @@
-export { enableValidation }
+export { enableValidation, toggleButtonState }
 
 // Функция получает форму и инпут-элемент, проверяет его на валидность
 function isValid(formElement, inputElement, settings) {

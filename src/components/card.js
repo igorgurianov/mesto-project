@@ -6,35 +6,35 @@ export { createCard, clickLikeCard, renderCard, updateLikeCounter }
 const cardsContainer = document.querySelector('.cards-grid');
 const userTemplate = document.querySelector('#card-template').content; // выбираем темплейт
 
-getCards()
-
 // создание новых карточек
-function createCard(cardNameValue, cardSrcValue, cardLikeCounter, cardOwnerId, cardId, likes) {
+function createCard(cardsInfo, userInfo) {
   const cardElement = userTemplate.querySelector('.place').cloneNode(true); //клонируем див внутри него со всем содержимым
   const cardElementPhoto = cardElement.querySelector('.place__photo'); // картинка как элемент карточки
-  const BtnLike = cardElement.querySelector('.place__like-button')
+  const btnLike = cardElement.querySelector('.place__like-button');
+  const counterLikes = cardElement.querySelector('.place__like-counter')
 
   // Кнопка удаления только под своими карточками
-  if (cardOwnerId == 'a9b2e44f4010ebf34559bc45') {
-    cardElement.querySelector('.place__delete-button').addEventListener('click', (event) => clickDeleteCard(event, cardId)) // слушатель на кнопку удаления карточки
+  if (userInfo._id === cardsInfo.owner._id) {
+    cardElement.querySelector('.place__delete-button').addEventListener('click', (event) => clickDeleteCard(event, cardsInfo._id)) // слушатель на кнопку удаления карточки
   } else {
-    const BtnDelete = cardElement.querySelector('.place__delete-button')
-    BtnDelete.remove()
+    const btnDelete = cardElement.querySelector('.place__delete-button')
+    btnDelete.remove()
   }
 
-  cardElement.querySelector('.place__like-counter').textContent = cardLikeCounter;
-  cardElement.querySelector('.place__name').textContent = cardNameValue; //подставляем название места из инпута
-  cardElementPhoto.src = cardSrcValue; // подставляем ссылку из инпута
-  cardElementPhoto.alt = cardNameValue // альтернативный текст если на загрузится
-  cardElementPhoto.addEventListener('click', function () { clickLargeImage(cardSrcValue, cardNameValue) }) // слушатель на картинку для открытия попапа - передаем ему 2 аргумента
+  cardElement.querySelector('.place__like-counter').textContent = cardsInfo.likes.length;
+  cardElement.querySelector('.place__name').textContent = cardsInfo.name; //подставляем название места из инпута
+  cardElementPhoto.src = cardsInfo.link; // подставляем ссылку из инпута
+  cardElementPhoto.alt = cardsInfo.name // альтернативный текст если на загрузится
+  cardElementPhoto.addEventListener('click', function () { clickLargeImage(cardsInfo.link, cardsInfo.name) }) // слушатель на картинку для открытия попапа - передаем ему 2 аргумента
 
-  BtnLike.addEventListener('click', (event) => clickLikeCard(event, cardId, cardLikeCounter)) // Слушатель на кнопку лайк
-  likes.forEach(element => {
-    if (element._id == 'a9b2e44f4010ebf34559bc45') {
-      BtnLike.classList.add('place__like-button_active')
+  btnLike.addEventListener('click', (event) => clickLikeCard(event, cardsInfo._id, counterLikes)) // Слушатель на кнопку лайк
+
+  // Отрисуем сердечки если уже лайкали раньше
+  cardsInfo.likes.forEach(element => {
+    if (element._id === userInfo._id) {
+      btnLike.classList.add('place__like-button_active')
     }
-  });
-
+  })
   return cardElement
 }
 
@@ -46,23 +46,29 @@ function renderCard(card) {
 // Функция коллбэк для слушателя на кнопке удалить.
 function clickDeleteCard(event, cardId) {
   deleteCard(cardId)
-  event.target.closest('.place').remove() // Отлеживаем на какой элемент кликнули, выбираем ближайший с классом Place и удаляем его
+    .then(() => { event.target.closest('.place').remove() })
+    .catch((res) => console.log(res))
 }
 
 // Кнопка лайк.
-function clickLikeCard(event, cardId) {
-
+function clickLikeCard(event, cardId, counterLikes) {
   if (event.target.classList.contains('place__like-button_active')) {
-    console.log('было активно, можем снять')
-    deleteLikeCard(event, cardId)
+    deleteLikeCard(cardId)
+      .then((res) => {
+        updateLikeCounter(res, counterLikes)
+        event.target.classList.remove('place__like-button_active')
+      })
+      .catch((res) => console.log(res))
   } else {
-    likeCard(event, cardId)
+    likeCard(cardId)
+      .then((res) => {
+        updateLikeCounter(res, counterLikes)
+        event.target.classList.add('place__like-button_active')
+      })
+      .catch((res) => console.log(res))
   }
-  //console.log(event.target)
-  //console.log(cardLikeCounter)
-  event.target.classList.toggle('place__like-button_active') // Переключаем наличие/отсутствие класса активной кнопки
 }
 
-function updateLikeCounter(event, res) {
-  event.target.nextElementSibling.textContent = `${res.likes.length}`
+function updateLikeCounter(res, counterLikes) {
+  counterLikes.textContent = res.likes.length
 }

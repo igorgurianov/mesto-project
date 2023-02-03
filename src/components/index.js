@@ -4,9 +4,9 @@ import '../pages/index.css'
 // Импорт модулей
 import { createCard, renderCard } from './card.js';
 import { closePopup, openPopup } from './modal.js';
-import { enableValidation } from './validate.js';
+import { enableValidation, toggleButtonState } from './validate.js';
 import { check, getCards, getUser, editProfileInfo, addNewCard, editAvatar } from './api.js'
-export { clickLargeImage, renderUserInfo, renderLoading }
+export { clickLargeImage, renderUserInfo, renderLoading, settings }
 
 // Закрытие попапов по оверлею
 const popupList = document.querySelectorAll('.popup') // выбираем все попапы
@@ -51,24 +51,33 @@ const imagePopupForm = document.querySelector('.popup_type_image');
 const popupLabel = imagePopupForm.querySelector('.popup__label');
 const largeImage = document.querySelector('.popup__image');
 
-enableValidation({
-  formSelector: '.popup__input-container',
+const settings = {
+  formSelector: ".popup__input-container",
   inputSelector: '.popup__text-input',
   submitButtonSelector: '.popup__submit',
   inactiveButtonClass: 'popup__submit_inactive',
   inputErrorClass: 'popup__text-input_type_error',
   errorClass: 'popup__input-error_active'
-})
+}
+
+enableValidation(settings)
+
+Promise.all([getCards(), getUser()]) //в Promise.all передаем массив промисов которые нужно выполнить
+  .then(([cardsInfo, userInfo]) => {    //попадаем сюда, когда оба промиса будут выполнены, деструктурируем ответ
+    renderUserInfo(userInfo)
+    cardsInfo.reverse().forEach(card => {
+      renderCard(createCard(card, userInfo))
+    });
+  })
+  .catch((err) => {
+    console.log(`Ошибка ${err}`);
+  })
 
 // ФУНКЦИИ
 // Отрисовка состояния загрузки
-function renderLoading(evt, isLoading) {
+function renderLoading(evt, text) {
   const btn = evt.target.querySelector('.popup__submit')
-  if (isLoading) {
-    btn.textContent = 'Сохранение...'
-  } else {
-    btn.textContent = 'Создать'
-  }
+  btn.textContent = text
 }
 
 // Открыть попап с картинкой
@@ -82,45 +91,77 @@ function clickLargeImage(cardSrcValue, cardNameValue) {
 // Кнопка "Создать" - добавить место
 function handleCardFormSubmit(evt) {
   evt.preventDefault();
-  renderLoading(evt, true)
-  addNewCard(cardName.value, cardSrc.value, evt)
-  closePopup(popupNewCard);
-  formAddCard.reset();
-  evt.submitter.classList.add('popup__submit_inactive');
-  evt.submitter.disabled = true;
+  renderLoading(evt, 'Создание...');
+  addNewCard(cardName.value, cardSrc.value)
+    .then((card) => {
+      renderCard(createCard(card, userData));
+    })
+    .then(() => {
+      closePopup(popupNewCard);
+      formAddCard.reset();
+      const cardFormInputs = Array.from(evt.srcElement.querySelectorAll('.popup__text-input'))
+      toggleButtonState(cardFormInputs, evt.submitter, settings)
+    })
+    .catch(res => console.log(`Ошибка при добавлении новой карточки: ${res.status}`))
+    .finally(() => {
+      renderLoading(evt, 'Создать')
+    })
 }
 
 // Кнопка сохранить - информация о пользователе
 function handleFormSubmit(evt) {
   evt.preventDefault();
-  renderLoading(evt, true)
+  renderLoading(evt, 'Сохранение...')
   editProfileInfo(`${nameInput.value}`, `${jobInput.value}`, evt)
-  closePopup(popupEditProfile);
-  evt.submitter.classList.add('popup__submit_inactive');
-  evt.submitter.disabled = true;
+    .then((res) => {
+      renderUserInfo(res, evt);
+    })
+    .then(() => {
+      closePopup(popupEditProfile);
+      formAddCard.reset();
+      evt.submitter.classList.add('popup__submit_inactive');
+      evt.submitter.disabled = true;
+    })
+    .catch((res) => {
+      console.log(`Ошибка при обновлении информации о пользователе: ${res.status}`)
+    })
+    .finally(() => {
+      renderLoading(evt, 'Сохранить')
+    })
 }
+
+let userData
 
 // Отрисовка информации о пользователе
 function renderUserInfo(userInfo) {
   profileAvatar.src = userInfo.avatar;
   profileName.textContent = userInfo.name;
   profileJob.textContent = userInfo.about;
+  userData = userInfo
 }
 
-getUser()
+// Кнопка сохранить - аватар
+function handleAvatarSubmit(evt) {
+  evt.preventDefault();
+  renderLoading(evt, 'Сохранение...')
+  editAvatar(avatarInput.value, evt)
+    .then((res) => {
+      renderUserInfo(res)
+      closePopup(popupEditAvatar)
+      formEditAvatar.reset();
+      evt.submitter.classList.add('popup__submit_inactive');
+      evt.submitter.disabled = true;
+    })
+    .catch(() => console.log('Ошибка при обновлении аватара'))
+    .finally(() => {
+      renderLoading(evt, 'Сохранить')
+    })
+}
 
 // СЛУШАТЕЛИ НА САБМИТ ФОРМ
 
 //__Слушатель - аватар
-formEditAvatar.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  renderLoading(evt, true)
-  editAvatar(avatarInput.value, evt)
-  closePopup(popupEditAvatar)
-  formEditAvatar.reset();
-  evt.submitter.classList.add('popup__submit_inactive');
-  evt.submitter.disabled = true;
-})
+formEditAvatar.addEventListener('submit', handleAvatarSubmit)
 
 //__Слушатель -  добавление карточек
 formAddCard.addEventListener('submit', handleCardFormSubmit)
