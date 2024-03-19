@@ -16,3 +16,13 @@
 
 - [Просмотр на Github Pages](https://igorgurianov.github.io/mesto-project/)
 - [Ссылка на исходный макет в Figma](https://www.figma.com/file/2cn9N9jSkmxD84oJik7xL7/JavaScript.-Sprint-4?node-id=0%3A1)
+
+## Использование
+1) Для установки и запуска проекта, необходим [NodeJS](https://nodejs.org/).
+2) Клонируйте репозиторий командой `git@github.com:igorgurianov/mesto-project.git`
+3) Запустите проект командой `npm run start`
+4) Проект будет доступен по умолчанию по адресу http://localhost:3000
+5) Чтобы выполнить production сборку, выполните команду: 
+```sh
+npm run build
+```
