@@ -19,10 +19,16 @@
 
 ## Использование
 1) Для установки и запуска проекта, необходим [NodeJS](https://nodejs.org/).
-2) Клонируйте репозиторий командой `git@github.com:igorgurianov/mesto-project.git`
-3) Запустите проект командой `npm run start`
-4) Проект будет доступен по умолчанию по адресу http://localhost:3000
-5) Чтобы выполнить production сборку, выполните команду: 
+2) Клонируйте репозиторий командой
+```sh
+git@github.com:igorgurianov/mesto-project.git
+```
+6) Запустите проект командой
+```sh
+npm run start
+```
+5) Проект будет доступен по умолчанию по адресу http://localhost:3000
+6) Чтобы выполнить production сборку, выполните команду: 
 ```sh
 npm run build
 ```
